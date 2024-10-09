@@ -27,7 +27,7 @@ void stuffing(char input[]) {
 }
 
 int main() {
-    char inp[20] = "ASHRITH";
+    char inp[20] = "CNPLABEXAM";
     stuffing(inp);
     return 0;
 }
