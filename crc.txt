@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_LEN 300
+
+int main() {
+    char data[MAX_LEN], gen[MAX_LEN], temp[MAX_LEN];
+    printf("Enter data: ");
+    scanf("%s", data);
+    printf("Enter generator: ");
+    scanf("%s", gen);
+
+    int dLen = strlen(data), gLen = strlen(gen);
+    strcpy(temp, data);
+    memset(temp + dLen, '0', gLen - 1);
+
+    for (int i = 0; i < dLen; i++) {
+        if (temp[i] == '1') {
+            for (int j = 0; j < gLen; j++) 
+                temp[i + j] = (temp[i + j] == gen[j]) ? '0' : '1';
+        }
+    }
+
+    strncpy(data + dLen, temp + dLen, gLen - 1);
+    data[dLen + gLen - 1] = '\0';
+    printf("CRC: %s\nTransmitted: %s\n", data + dLen, data);
+
+    printf("Enter received: ");
+    scanf("%s", temp);
+    printf(strcmp(data, temp) ? "Corrupted\n" : "Success\n");
+    return 0;
+}

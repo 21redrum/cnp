@@ -1,0 +1,53 @@
+#include <stdio.h>
+
+#define N 100
+#define E 100
+
+struct Node { int s; } n[N];
+struct Edge { int f, s, l, d; } e[E];
+int ec = 0;
+
+void g(int i, int t) {
+    for (int j = i; j < t; j++)
+        if (j != i) {
+            printf("\nEnter distance between %c and %c:", i + 65, j + 65);
+            scanf("%d", &e[ec].d), e[ec].f = i, e[ec].s = j, ec++;
+        }
+}
+
+void init(int t) {
+    for (int i = 0; i < t; i++) n[i].s = i;
+    for (int i = 0; i < ec; i++) e[i].l = -1;
+}
+
+void s() {
+    for (int i = 0; i < ec - 1; i++)
+        for (int j = 0; j < ec - i - 1; j++)
+            if (e[j].d > e[j + 1].d) {
+                struct Edge t = e[j]; e[j] = e[j + 1]; e[j + 1] = t;
+            }
+}
+
+int main() {
+    int t; printf("\nEnter number of nodes:"); scanf("%d", &t);
+    for (int i = 0; i < t; i++) g(i, t);
+    init(t); s();
+    for (int i = 0, es = 0, nl, nr; es < (t - 1); i++) {
+        e[i].l = 1, nl = e[i].f, nr = e[i].s;
+        if (n[nl].s != n[nr].s) {
+            es++; int m = n[nl].s, k = n[nr].s;
+            for (int j = 0; j < t; j++) {
+                if (n[j].s == k) n[j].s = m;
+            }
+        } else {
+            e[i].l = -1;
+        }
+    }
+    printf("\nMinimum Spanning Tree is:");
+    for (int i = 0; i < ec; ++i) {
+        if (e[i].l == 1) {
+            printf("\n%c<-->%c Dist %d", e[i].f + 65, e[i].s + 65, e[i].d);
+        }
+    }
+    return 0;
+}

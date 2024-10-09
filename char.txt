@@ -1,0 +1,72 @@
+//stuff
+
+#include<stdio.h>
+#include<string.h>
+
+void stuffing(char input[]) {
+    char output[200];  // Buffer size adjusted for maximum stuffing
+    int k = 0, i = 0, N = strlen(input);
+
+    strcpy(output, "DLESTX"); // Start frame with DLESTX
+    k += 6;
+
+    while (i < N) {
+        if (strncmp(input + i, "DLE", 3) == 0) {  // Check if 'DLE' is found
+            strcpy(output + k, "DLEDLE"); // Stuff 'DLE' with 'DLEDLE'
+            k += 6; i += 3;  // Skip the original 'DLE'
+        } else {
+            output[k++] = input[i++];  // Copy other characters
+        }
+    }
+
+    strcpy(output + k, "DLEETX"); // End frame with DLEETX
+    k += 6;
+    output[k] = '\0';  // Null terminate the output string
+
+    printf("Stuffed string: %s\n", output);
+}
+
+int main() {
+    char inp[20] = "ASHRITH";
+    stuffing(inp);
+    return 0;
+}
+
+
+
+//destuff
+
+#include<stdio.h>
+#include<string.h>
+
+void destuffing(char *input) {
+    char output[100];
+    int i, k = 0;
+    int text = 0;  
+
+    for (i = 0; input[i]; i++) {
+        if (strncmp(input + i, "DLE", 3) == 0) {
+            if (strncmp(input + i + 3, "STX", 3) == 0) {
+                text = 1; 
+                i += 5;
+            } else if (strncmp(input + i + 3, "ETX", 3) == 0) {
+                break;  
+            } else if (input[i + 3] == 'D' && input[i + 4] == 'L' && input[i + 5] == 'E') {
+                output[k++] = 'D';
+                output[k++] = 'L';
+                output[k++] = 'E';
+                i += 5; 
+            }
+        } else if (text) {
+            output[k++] = input[i];
+        }
+    }
+    output[k] = '\0';  
+    printf("Output string: %s\n", output);
+}
+
+int main() {
+    char input[] = "DLESTXCNPLABEXAMDLEETX";
+    destuffing(input);
+    return 0;
+}

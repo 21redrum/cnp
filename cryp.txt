@@ -1,0 +1,51 @@
+//encrp
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main() {
+    char seq[] = "qwertyuiopasdfghjklzxcvbnm1234567890";
+    char data[50], encoded[50];
+
+    printf("Enter data: ");
+    fgets(data, sizeof(data), stdin);
+    data[strcspn(data, "\n")] = '\0';  // Remove newline character
+
+    for (int i = 0; data[i]; i++) {
+        encoded[i] = isupper(data[i]) ? seq[data[i] - 'A'] :
+                     islower(data[i]) ? toupper(seq[data[i] - 'a']) :
+                     isdigit(data[i]) ? seq[data[i] - '0' + 26] :
+                     data[i];
+    }
+
+    printf("Encoded string is: %s\n", encoded);
+
+    return 0;
+}
+
+
+// decrp
+
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h> 
+int main() {
+    const char *seq = "qwertyuiopasdfghjklzxcvbnm1234567890";
+    char data[100], decoded[100];
+    int i, j;
+
+    printf("Enter data: ");
+    fgets(data, sizeof(data), stdin);
+    data[strcspn(data, "\n")] = 0; // Remove newline character, if present
+
+    for (i = 0; data[i]; i++) {
+        for (j = 0; seq[j] && seq[j] != tolower(data[i]); j++);
+        decoded[i] = seq[j] ? (isupper(data[i]) ? 'a' + j : islower(data[i]) ? 'A' + j : '0' + (j - 26)) : data[i];
+    }
+    decoded[i] = '\0';
+    printf("Decoded string is: %s\n", decoded);
+
+    return 0;
+    
+}
